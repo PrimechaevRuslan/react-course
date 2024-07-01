@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import css from "../../../styles/styles.css";
 
 const buttonCss = {
@@ -12,22 +13,18 @@ const buttonCss = {
 
 const { HeaderContainer, HeaderCss } = css;
 
-const Head = (props) => {
+const Head = () => {
 
-    const { action } = props;
+    const navigate = useNavigate();
 
     return(
         <React.Fragment>
             <HeaderContainer>
                 <HeaderCss.Logo>FINMANAGER</HeaderCss.Logo>
                 <HeaderCss.MenuContainer>
-                    <button onClick={() => {
-                        action('main')
-                    }} style={buttonCss}>Главная</button>
-                    <button onClick={() => {
-                        action('stat')
-                    }} style={buttonCss}>Статистика</button>
-                    <button style={buttonCss}>Планирование</button>
+                    <button onClick={() => navigate('/main')} style={buttonCss}>Главная</button>
+                    <button onClick={() => navigate('/stat/расход')} style={buttonCss}>Статистика</button>
+                    <button onClick={() => navigate('/plan')} style={buttonCss}>Планирование</button>
                 </HeaderCss.MenuContainer>
             </HeaderContainer>
         </React.Fragment>

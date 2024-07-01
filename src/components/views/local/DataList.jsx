@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import css from "../../../styles/dataList.css";
+import { useNavigate } from "react-router-dom";
 
 const { DataContainer, ContentLine, ContentCell, ButtonsLine, ButtonItem } = css
 
 const DataList = (props) => {
 
-    const { data = [] } = props
-    const [dataType, setDataType] = useState('расход');
-    const filterData = data.filter(item => item.split('::')[1] === dataType)
-    const filterDataSumm = data.filter(item => item.split('::')[1] === dataType)
+    const { data = [], setShow, viewType } = props
+    const navigate = useNavigate();
+    const filterData = data.filter(item => item.split('::')[1] === viewType)
+    const filterDataSumm = data.filter(item => item.split('::')[1] === viewType)
         .reduce((summ, item) => {
             const amount = parseFloat(item.split('::')[0].split(' ')[0]);
             return summ + amount;
@@ -25,22 +26,22 @@ const DataList = (props) => {
         }, 0);
 
 
-    const reduceDataType1 = () => setDataType('доход')
-    const reduceDataType2 = () => setDataType('расход')
-    const reduceDataType3 = () => setDataType('')
-
-
-
-    useEffect(() => {
-        console.log(data);
-    }, []);
+    const reduceDataType1 = () => {
+        navigate('/stat/доход')
+        setShow(false)
+    }
+    const reduceDataType2 = () => {
+        navigate('/stat/расход')
+        setShow(true)
+    }
+    const reduceDataType3 = () => navigate('/stat/общее')
 
     return (
         <React.Fragment>
             <ButtonsLine>
-                <ButtonItem onClick={reduceDataType1}>доходы</ButtonItem>
-                <ButtonItem onClick={reduceDataType2}>расходы</ButtonItem>
-                <ButtonItem onClick={reduceDataType3}>общее</ButtonItem>
+                <ButtonItem style={{fontWeight: viewType === 'доход' ? 'bold' : ''}} onClick={reduceDataType1}>доходы</ButtonItem>
+                <ButtonItem style={{fontWeight: viewType === 'расход' ? 'bold' : ''}} onClick={reduceDataType2}>расходы</ButtonItem>
+                <ButtonItem style={{fontWeight: viewType === 'общее' ? 'bold' : ''}} onClick={reduceDataType3}>общее</ButtonItem>
             </ButtonsLine>
             <DataContainer>
                 {filterData.length > 0 && <React.Fragment>
